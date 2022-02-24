@@ -15,6 +15,14 @@ class Board {
         throw 'Cant change this value'
     }
     
+    get columns() {
+        return this._columns
+    }
+    
+    set columns(_) {
+        throw 'Cant change this value'
+    }
+    
     get map() {
         return this._map
     }   
@@ -52,8 +60,34 @@ class Board {
         }
         // Retornando essa matrix para uso
         return map
-      }
+    }
+
+    renderMap(container) {
+        container.innerText = ''
+        for(let indexColuna = 0; indexColuna < this.columns; indexColuna++) {
+            const column = document.createElement('div') 
+            column.classList.add('column')
+            column.style.width = `${100/this.columns}%`
+            column.dataset.column = indexColuna
+            column.addEventListener('click', () => {"Adicionaremos uma função de click futuramente"})
+
+            for(let indexLinha = 0; indexLinha < this.rows; indexLinha++) {
+                const celula = document.createElement('div')
+                celula.classList.add('cell')
+                celula.style.height = `${100/this.rows}%`
+                celula.dataset.row = indexLinha
+                column.appendChild(celula)
+            }
+            container.appendChild(column)
+        }
+
+    }
+
+    
 
 
+}
 
-  }
+let board = new Board(6,6, [1,2])
+const container = document.getElementById('table')
+board.renderMap(container)
