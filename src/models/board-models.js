@@ -1,3 +1,5 @@
+//import { Player } from './player_model.js'
+
 class Board {
     constructor(columns, rows, players) {
         this._columns = columns
@@ -69,7 +71,7 @@ class Board {
             column.classList.add('column')
             column.style.width = `${100/this.columns}%`
             column.dataset.column = indexColuna
-            column.addEventListener('click', () => {"Adicionaremos uma função de click futuramente"})
+            column.addEventListener('click', this.handleClick)
 
             for(let indexLinha = 0; indexLinha < this.rows; indexLinha++) {
                 const celula = document.createElement('div')
@@ -83,11 +85,60 @@ class Board {
 
     }
 
+    switchPlayer() {
+        const playerCurrent = this.players.indexOf(this.currentPlayer)
+        const playerNext = (playerCurrent + 1)%this.players.length
+        this.currentPlayer = this.players[playerNext]
+    }
     
+    handleClick(column) {
+        let row = this.map.findIndex(row => row[column])
+    
+        if(row === -1) {
+            row = this.rows
+        }
+    
+        this.map[row - 1][column] = this.currentPlayer
+    
+        const cell = new Cell(column, row, this.currentPlayer.className)
+        
+        cell.render()
+
+        if(this.isWinnableMove(column,row-1)) {
+            console.log(`${this.currentPlayer.name} ganhou`)
+        }
+        
+        this.switchPlayer()
+    }
+
+    checkVertical(column, row) {
+        let end = row + 3
+    
+        if(end >= this.rows){
+            end = this.rows -1
+        }
+    
+        let counter = 0
+        for (let index = row; index <= end; index++) {
+            if(this.map[index][column] === this.currentPlayer) {
+                counter++
+            } else {
+                counter = 0
+            }
+            if (counter === 4) {
+                return true
+            }
+        }
+        return false
+    }
+
+    isWinnableMove(column, row) {
+        return this.checkVertical(column, row)
+    }
+
+
 
 
 }
 
-let board = new Board(6,6, [1,2])
-const container = document.getElementById('table')
-board.renderMap(container)
+//export {Board}

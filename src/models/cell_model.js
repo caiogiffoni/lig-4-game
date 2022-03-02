@@ -39,5 +39,8 @@ class Cells {
         div.appendChild(playerDiv)
     }
 
+    
 
 }
+
+//export {Cells}
